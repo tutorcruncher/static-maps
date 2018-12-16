@@ -1,5 +1,5 @@
 .DEFAULT_GOAL:=all
-HEROKU_APP?=staticmaps
+HEROKU_APP?=static-maps
 
 .PHONY: install
 install:
@@ -40,5 +40,5 @@ push: build
 	docker push registry.heroku.com/$(HEROKU_APP)/web
 
 .PHONY: release
-release: push
-	heroku container:release web worker -a $(HEROKU_APP)
+release:
+	heroku container:release web -a $(HEROKU_APP)

@@ -21,6 +21,7 @@ RUN find /usr/local/lib/python3.7/site-packages -name '__pycache__' -delete
 FROM python:3.7-alpine3.8
 ENV PYTHONUNBUFFERED 1
 ENV APP_ON_DOCKER 1
+ENV ATOOLBOX_ROOT_DIR app
 WORKDIR /home/root
 RUN adduser -D runuser
 USER runuser
