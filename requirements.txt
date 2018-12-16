@@ -1,7 +1,5 @@
-aiobotocore==0.9.4
 aiohttp==3.4.4
-aiohttp-toolbox==0.0.8
-aioredis==1.2.0
+aiohttp-toolbox==0.0.10
 brotli==1.0.7
 cchardet==2.1.4
 pillow==5.3.0

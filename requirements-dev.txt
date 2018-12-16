@@ -1,0 +1,4 @@
+aiohttp-devtools
+devtools
+ipython
+httpie

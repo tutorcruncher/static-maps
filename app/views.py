@@ -3,7 +3,7 @@ from pathlib import Path
 from aiohttp.web import Response, FileResponse, HTTPBadRequest
 from pydantic import BaseModel, conint, confloat, ValidationError
 
-from .build_map import BuildMap
+from build_map import BuildMap
 
 THIS_DIR = Path(__file__).parent
 ROBOTS_TXT = THIS_DIR / 'robots.txt'
