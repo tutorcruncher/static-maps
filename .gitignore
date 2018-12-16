@@ -1,0 +1,4 @@
+/.idea/
+/env/
+*.py[cod]
+/app/index.tmp.html

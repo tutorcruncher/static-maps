@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  <title>Static Maps</title>
+  <style>
+    body {
+      margin: 10px auto;
+      width: 35rem;
+      font-family: monospace;
+      background: #282c34;
+      color: white;
+    }
+    section {
+      text-align: center;
+      padding-top: 20px;
+    }
+    @media (max-width: 35rem) {
+      body {
+        font-size: 2.3vw;
+      }
+    }
+    a {
+      text-decoration: none;
+      color: #72b3c8;
+    }
+    code {
+      color: #cbdab6;
+    }
+    ul {
+      list-style-type: none;
+    }
+  </style>
+</head>
+<body>
+<pre>
+           _____ _        _   _        __  __
+          / ____| |      | | (_)      |  \/  |
+         | (___ | |_ __ _| |_ _  ___  | \  / | __ _ _ __  ___
+          \___ \| __/ _` | __| |/ __| | |\/| |/ _` | '_ \/ __|
+          ____) | || (_| | |_| | (__  | |  | | (_| | |_) \__ \
+         |_____/ \__\__,_|\__|_|\___| |_|  |_|\__,_| .__/|___/
+                                                   | |
+                                                   |_|
+</pre>
+<section>
+  COMMIT: {{ COMMIT }}
+  <br>
+  BUILD TIME: {{ BUILD_TIME }}
+</section>
+<section>
+  <p>
+    Generator of map images.
+  </p>
+  <p>
+    Maps are generated using <a href="https://www.openstreetmap.org/copyright">Open Street Maps</a>
+    data and services.
+  </p>
+</section>
+<section>
+  To generate a map go to:
+
+  <p>
+    <code>
+      /map.jpg?lat=&lt;latitude&gt;&lng=&lt;longitude&gt;
+    </code>
+  </p>
+  Three other get parameters can also be used:
+  <ul>
+    <li>
+      <code>zoom</code> - for the zoom level of the map, default: <code>17</code>.
+    </li>
+    <li>
+      <code>width</code> - for the width of the image generated, default: <code>600</code>.
+    </li>
+    <li>
+      <code>height</code> - for the height of the image generated, default: <code>400</code>.
+    </li>
+  </ul>
+</section>
+</body>
+</html>
