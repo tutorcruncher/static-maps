@@ -12,6 +12,8 @@ sys.path.append(str(ROOT_DIR))
 
 
 async def osm_image(request):
+    if request.match_info['zoom'] == '6':
+        return web.Response(text='bad', status=429)
     stream = BytesIO()
     image = Image.new('RGBA', (256, 256), (50, 100, 150))
     image.save(stream, format='png')

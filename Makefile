@@ -18,7 +18,7 @@ lint:
 
 .PHONY: test
 test:
-	pytest tests --cov=app --cov-config setup.cfg --isort tests
+	pytest --cov=app --isort tests
 
 .PHONY: testcov
 testcov: test
