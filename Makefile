@@ -1,10 +1,30 @@
-.DEFAULT_GOAL:=build
+.DEFAULT_GOAL:=all
 HEROKU_APP?=staticmaps
 
 .PHONY: install
 install:
 	pip install -r requirements.txt
 	pip install -r requirements-dev.txt
+
+.PHONY: isort
+isort:
+	isort -rc -w 120 app tests
+
+.PHONY: lint
+lint:
+	flake8 app tests
+	pytest -p no:sugar -q --cache-clear --isort app
+
+.PHONY: test
+test:
+	pytest tests --cov=app --cov-config setup.cfg --isort tests
+
+.PHONY: testcov
+testcov: test
+	coverage html --rcfile=py/setup.cfg
+
+.PHONY: all
+all: testcov lint
 
 .PHONY: build
 build: C=$(shell git rev-parse HEAD)

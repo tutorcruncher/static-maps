@@ -6,7 +6,7 @@ from aiohttp import web
 from atoolbox import create_default_app
 from atoolbox.middleware import error_middleware
 
-from views import get_map, index, robots
+from app.views import get_map, index, robots
 
 ROOT_DIR = Path(__file__).parent
 

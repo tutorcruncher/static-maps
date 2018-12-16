@@ -2,7 +2,7 @@
 # pre-built python build stage
 FROM python:3.7-alpine3.8 as python-build
 
-RUN apk add -U gcc g++ musl-dev zlib-dev libuv libffi-dev make openssl-dev git jpeg-dev openjpeg libjpeg-turbo tiff-dev
+RUN apk add -U gcc g++ musl-dev zlib-dev libuv libffi-dev make git jpeg-dev openjpeg libjpeg-turbo tiff-dev
 
 ADD ./requirements.txt /home/root/requirements.txt
 RUN pip install -r /home/root/requirements.txt

@@ -2,3 +2,5 @@
 /env/
 *.py[cod]
 /app/index.tmp.html
+.coverage
+.pytest_cache

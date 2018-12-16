@@ -7,7 +7,6 @@ import random
 from PIL import Image
 
 logger = logging.getLogger('app.build_img')
-URL_TEMPLATE = 'http://{shard}.tile.openstreetmap.org/{zoom}/{x}/{y}.png'
 SHARDS = 'a', 'b', 'c'
 TILE_SIZE = 256
 
@@ -15,10 +14,11 @@ __all__ = 'BuildMap',
 
 
 class BuildMap:
-    __slots__ = 'http_client', 'lat', 'lng', 'zoom', 'w', 'h', 'tiles_x', 'tiles_y', 'image'
+    __slots__ = 'http_client', 'url_template', 'lat', 'lng', 'zoom', 'w', 'h', 'tiles_x', 'tiles_y', 'image'
 
     def __init__(self, app, *, lat, lng, zoom, width, height):
         self.http_client = app['http_client']
+        self.url_template = app['settings'].osm_root + '/{zoom}/{x}/{y}.png'
         self.lat = lat
         self.lng = lng
         self.zoom = zoom
@@ -61,7 +61,7 @@ class BuildMap:
                 yield self.get_tile(x_offset + x, y_offset + y, row_offset, col_offset)
 
     async def get_tile(self, x, y, row_offset, col_offset):
-        url = URL_TEMPLATE.format(zoom=self.zoom, x=x, y=y, shard=random.choice(SHARDS))
+        url = self.url_template.format(zoom=self.zoom, x=x, y=y, shard=random.choice(SHARDS))
         # debug(url)
         async with self.http_client.get(url) as r:
             content = await r.read()

@@ -2,4 +2,4 @@ from atoolbox import BaseSettings
 
 
 class Settings(BaseSettings):
-    pass
+    osm_root = 'https://{shard}.tile.openstreetmap.org'
