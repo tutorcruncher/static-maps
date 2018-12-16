@@ -3,9 +3,9 @@ from io import BytesIO
 from pathlib import Path
 
 import pytest
-from PIL import Image
 from aiohttp import web
 from atoolbox.test_utils import DummyServer, create_dummy_server
+from PIL import Image
 
 ROOT_DIR = Path(__file__).parent / '..'
 sys.path.append(str(ROOT_DIR))
@@ -21,7 +21,7 @@ async def osm_image(request):
 @pytest.fixture(name='dummy_server')
 async def _fix_dummy_server(loop, aiohttp_server):
     urls = [
-        web.get('/osm/{zoom:\d+}/{x:\d+}/{y:\d+}.png', osm_image)
+        web.get(r'/osm/{zoom:\d+}/{x:\d+}/{y:\d+}.png', osm_image)
     ]
     return await create_dummy_server(aiohttp_server, extra_routes=urls)
 

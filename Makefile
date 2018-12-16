@@ -4,6 +4,7 @@ HEROKU_APP?=staticmaps
 .PHONY: install
 install:
 	pip install -r requirements.txt
+	pip install -r tests/requirements.txt
 	pip install -r requirements-dev.txt
 
 .PHONY: isort
@@ -21,7 +22,7 @@ test:
 
 .PHONY: testcov
 testcov: test
-	coverage html --rcfile=py/setup.cfg
+	coverage html
 
 .PHONY: all
 all: testcov lint

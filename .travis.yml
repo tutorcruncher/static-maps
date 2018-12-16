@@ -15,7 +15,8 @@ cache: pip
 
 install:
 - pip install -U pip setuptools
-- make install
+- pip install -r requirements.txt
+- pip install -r tests/requirements.txt
 
 script:
 - make lint
