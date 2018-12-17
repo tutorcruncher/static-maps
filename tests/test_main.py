@@ -56,10 +56,19 @@ async def test_map_images(cli, dummy_server):
     assert sorted(dummy_server.log) == [(10, 511, 1), (10, 512, 1)]
 
 
-async def test_map_at_edge(cli, dummy_server):
-    r = await cli.get('/map.jpg?lat=85&lng=-180&width=20&height=10')
+async def test_map_not_at_edge(cli, dummy_server):
+    r = await cli.get('/map.jpg?lat=45&lng=0&width=800&height=100')
     content = await r.read()
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
-    assert image.size == (20, 10)
-    assert sorted(dummy_server.log) == [(10, 0, 1)]
+    assert image.size == (800, 100)
+    assert len(dummy_server.log) == 4
+
+
+async def test_map_at_edge(cli, dummy_server):
+    r = await cli.get('/map.jpg?lat=45&lng=-180&width=800&height=100')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    assert image.size == (800, 100)
+    assert len(dummy_server.log) == 2
