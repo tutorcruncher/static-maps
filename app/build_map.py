@@ -6,7 +6,7 @@ import random
 
 from PIL import Image
 
-logger = logging.getLogger('app.build_img')
+logger = logging.getLogger('app.build')
 SHARDS = 'a', 'b', 'c'
 TILE_SIZE = 256
 

@@ -7,8 +7,8 @@ from aiohttp import web
 from atoolbox.test_utils import DummyServer, create_dummy_server
 from PIL import Image
 
-ROOT_DIR = Path(__file__).parent / '..'
-sys.path.append(str(ROOT_DIR))
+APP_DIR = Path(__file__).parent / '../app'
+sys.path.append(str(APP_DIR))
 
 
 async def osm_image(request):
@@ -30,12 +30,12 @@ async def _fix_dummy_server(loop, aiohttp_server):
 
 @pytest.fixture(name='settings')
 def _fix_settings(dummy_server: DummyServer, request):
-    from app.settings import Settings
+    from settings import Settings
     return Settings(osm_root=f'{dummy_server.server_name}/osm')
 
 
 @pytest.fixture(name='cli')
 async def _fix_cli(settings, aiohttp_client, loop):
-    from app.main import create_app
+    from main import create_app
     app = await create_app(settings=settings)
     return await aiohttp_client(app)
