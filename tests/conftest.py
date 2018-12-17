@@ -12,7 +12,9 @@ sys.path.append(str(APP_DIR))
 
 
 async def osm_image(request):
-    if request.match_info['zoom'] == '6':
+    zoom = int(request.match_info['zoom'])
+    request.app['log'][-1] = (int(zoom), int(request.match_info['x']), int(request.match_info['y']))
+    if zoom == 6:
         return web.Response(text='bad', status=429)
     stream = BytesIO()
     image = Image.new('RGBA', (256, 256), (50, 100, 150))

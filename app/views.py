@@ -50,8 +50,8 @@ def build_index():
 
 
 class QueryModel(BaseModel):
-    lat: confloat(ge=-90, le=90)
-    lng: confloat(ge=-360, le=360)
+    lat: confloat(ge=-85, le=85)
+    lng: confloat(ge=-180, le=180)
     zoom: conint(gt=0, lt=20) = 10
     width: conint(ge=10, lt=2000) = 600
     height: conint(ge=10, lt=2000) = 400

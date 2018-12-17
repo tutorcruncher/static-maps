@@ -42,6 +42,24 @@ async def test_osm_error(cli, dummy_server, caplog):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (20, 10)
-    assert len(caplog.records) == 9
+    assert len(caplog.records) == 3
     r = caplog.records[0]
     assert r.getMessage() == RegexStr(r"unexpected status 429 from 'http://localhost:\d+/osm/6/\d\d/\d\d\.png'")
+
+
+async def test_map_images(cli, dummy_server):
+    r = await cli.get('/map.jpg?lat=85&lng=0&width=300&height=100')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    assert image.size == (300, 100)
+    assert sorted(dummy_server.log) == [(10, 511, 1), (10, 512, 1)]
+
+
+async def test_map_at_edge(cli, dummy_server):
+    r = await cli.get('/map.jpg?lat=85&lng=-180&width=20&height=10')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    assert image.size == (20, 10)
+    assert sorted(dummy_server.log) == [(10, 0, 1)]
