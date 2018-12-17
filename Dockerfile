@@ -2,7 +2,7 @@
 # pre-built python build stage
 FROM python:3.7-alpine3.8 as python-build
 
-RUN apk add -U gcc g++ musl-dev zlib-dev libuv libffi-dev make git jpeg-dev openjpeg libjpeg-turbo tiff-dev
+RUN apk add -U gcc g++ musl-dev zlib-dev libuv libffi-dev make jpeg-dev openjpeg libjpeg-turbo
 
 ADD ./requirements.txt /home/root/requirements.txt
 RUN pip install -r /home/root/requirements.txt
@@ -23,13 +23,13 @@ ENV PYTHONUNBUFFERED 1
 ENV APP_ON_DOCKER 1
 ENV ATOOLBOX_ROOT_DIR app
 WORKDIR /home/root
-RUN adduser -D runuser
-USER runuser
+USER root
 
 COPY --from=python-build /usr/local/bin/atoolbox /usr/local/bin/
 COPY --from=python-build /lib/* /lib/
 COPY --from=python-build /usr/lib/* /usr/lib/
 COPY --from=python-build /usr/local/lib/python3.7/site-packages /usr/local/lib/python3.7/site-packages
+RUN ls -lhR /usr/local/lib/python3.7/site-packages
 
 ADD ./app /home/root/app
 

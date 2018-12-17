@@ -42,3 +42,7 @@ push: build
 .PHONY: release
 release:
 	heroku container:release web -a $(HEROKU_APP)
+
+.PHONY: run
+run: build
+	docker run -it --rm -p 8000:8000 static-maps
