@@ -6,11 +6,15 @@ import random
 from statistics import mean
 from time import time
 
+from aiohttp.http import SERVER_SOFTWARE
 from PIL import Image
 
 logger = logging.getLogger('app.build')
 SHARDS = 'a', 'b', 'c'
 TILE_SIZE = 256
+HEADERS = {
+    'User-Agent': f'{SERVER_SOFTWARE} https://github.com/tutorcruncher/static-maps'
+}
 
 __all__ = 'BuildMap',
 
@@ -66,11 +70,12 @@ class BuildMap:
         url = self.url_template.format(zoom=self.zoom, x=osm_x, y=osm_y, shard=random.choice(SHARDS))
         # debug(url, osm_x, osm_y, image_x, image_y)
         start = time()
-        async with self.http_client.get(url) as r:
+        async with self.http_client.get(url, headers=HEADERS) as r:
             content = await r.read()
         self.times.append(time() - start)
         if r.status != 200:
             data = {'content': content, 'response_headers': dict(r.headers)}
+            print(content.decode())
             logger.warning('unexpected status %d from %r', r.status, url, extra={'data': data})
         else:
             image = Image.open(io.BytesIO(content)).convert('RGB')
