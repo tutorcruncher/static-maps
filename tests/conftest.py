@@ -19,7 +19,8 @@ async def osm_image(request):
     stream = BytesIO()
     image = Image.new('RGBA', (256, 256), (50, 100, 150))
     image.save(stream, format='png')
-    request.app['log'][-1] = (int(zoom), int(request.match_info['x']), int(request.match_info['y']))
+    request.app['log'][-1] = (int(zoom), int(request.match_info['x']), int(request.match_info['y']),
+                              request.headers.get('Referer'))
     return web.Response(body=stream.getvalue())
 
 

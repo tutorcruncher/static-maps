@@ -1,13 +1,11 @@
 import os
 import re
-from pathlib import Path
 
 from aiohttp.web import FileResponse, HTTPBadRequest, Response
 from pydantic import BaseModel, ValidationError, confloat, conint
 
-from build_map import BuildMap
+from build_map import THIS_DIR, BuildMap
 
-THIS_DIR = Path(__file__).parent
 ROBOTS_TXT = THIS_DIR / 'robots.txt'
 
 
@@ -24,7 +22,8 @@ async def robots(request):
 
 async def get_map(request):
     m: QueryModel = parse_request_query(request)
-    builder = BuildMap(request.app, **m.dict())
+    referrer = request.headers.get('Referer')
+    builder = BuildMap(request.app, referrer, **m.dict())
     image = await builder.run()
     return Response(
         body=image,
@@ -53,8 +52,8 @@ class QueryModel(BaseModel):
     lat: confloat(ge=-85, le=85)
     lng: confloat(ge=-180, le=180)
     zoom: conint(gt=0, lt=20) = 10
-    width: conint(ge=10, lt=2000) = 600
-    height: conint(ge=10, lt=2000) = 400
+    width: conint(ge=200, lt=2000) = 600
+    height: conint(ge=100, lt=2000) = 400
 
 
 def parse_request_query(request) -> QueryModel:

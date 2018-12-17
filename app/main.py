@@ -1,3 +1,5 @@
+from asyncio import Semaphore
+
 from aiohttp import web
 from atoolbox import create_default_app
 from atoolbox.middleware import error_middleware
@@ -16,4 +18,8 @@ async def create_app(settings=None):
     middleware = (error_middleware,)
     app = await create_default_app(settings=settings, routes=routes, middleware=middleware)
     app['index_path'] = build_index()
+    app.update(
+        index_page=build_index(),
+        osm_semaphore=Semaphore(value=32)
+    )
     return app
