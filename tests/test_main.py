@@ -56,19 +56,35 @@ async def test_map_images(cli, dummy_server):
     assert sorted(dummy_server.log) == [(10, 511, 1), (10, 512, 1)]
 
 
-async def test_map_not_at_edge(cli, dummy_server):
-    r = await cli.get('/map.jpg?lat=45&lng=0&width=800&height=100')
-    content = await r.read()
-    assert r.status == 200, content
-    image = Image.open(BytesIO(content))
-    assert image.size == (800, 100)
-    assert len(dummy_server.log) == 4
-
-
-async def test_map_at_edge(cli, dummy_server):
+async def test_x_wrapped(cli, dummy_server):
     r = await cli.get('/map.jpg?lat=45&lng=-180&width=800&height=100')
     content = await r.read()
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (800, 100)
+    print(sorted(dummy_server.log))
+    assert sorted(dummy_server.log) == [
+        (10, 0, 368),
+        (10, 1, 368),
+        (10, 1022, 368),  # x wrapped
+        (10, 1023, 368)
+    ]
+
+
+async def test_not_y_cut(cli, dummy_server):
+    r = await cli.get('/map.jpg?lat=0&lng=10&width=100&height=800&zoom=3')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    assert image.size == (100, 800)
+    assert len(dummy_server.log) == 4
+
+
+async def test_y_cut(cli, dummy_server):
+    r = await cli.get('/map.jpg?lat=85&lng=10&width=100&height=800&zoom=3')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    assert image.size == (100, 800)
     assert len(dummy_server.log) == 2
+    assert sorted(dummy_server.log) == [(3, 4, 0), (3, 4, 1)]

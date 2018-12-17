@@ -9,14 +9,14 @@ from time import time
 from aiohttp.http import SERVER_SOFTWARE
 from PIL import Image
 
+__all__ = 'BuildMap',
+
 logger = logging.getLogger('app.build')
 SHARDS = 'a', 'b', 'c'
 TILE_SIZE = 256
 HEADERS = {
     'User-Agent': f'{SERVER_SOFTWARE} https://github.com/tutorcruncher/static-maps'
 }
-
-__all__ = 'BuildMap',
 
 
 class BuildMap:
@@ -55,7 +55,7 @@ class BuildMap:
     @staticmethod
     def range_correction(tile_no, size):
         half_t = size / 2 / TILE_SIZE  # half the width/height in tiles
-        min_, max_ = int(tile_no - half_t), int(math.ceil(tile_no + half_t))
+        min_, max_ = int(math.floor(tile_no - half_t)), int(math.ceil(tile_no + half_t))
         correction = (tile_no - min_) * TILE_SIZE - size / 2
         return range(min_, max_), int(round(correction))
 
@@ -65,8 +65,10 @@ class BuildMap:
                 yield self.get_tile(x, y, col * TILE_SIZE - x_correction, row * TILE_SIZE - y_correction)
 
     async def get_tile(self, osm_x, osm_y, image_x, image_y):
-        if not 0 <= osm_x < self.no_tiles or not 0 <= osm_y < self.no_tiles:
+        if not 0 <= osm_y < self.no_tiles:
             return
+        # wraps map around at edges
+        osm_x = osm_x % self.no_tiles
         url = self.url_template.format(zoom=self.zoom, x=osm_x, y=osm_y, shard=random.choice(SHARDS))
         # debug(url, osm_x, osm_y, image_x, image_y)
         start = time()
