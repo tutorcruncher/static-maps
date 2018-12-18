@@ -24,7 +24,9 @@ FONT_FILE = str(THIS_DIR / 'HelveticaNeue.ttf')
 COPYRIGHT_MSG = '© OpenStreetMap contributors'
 
 MARKER_FILE = THIS_DIR / 'marker.png'
-MARKER_WIDTH, MARKER_HEIGHT = 44, 73
+MARKER_WIDTH, MARKER_HEIGHT = 88, 147
+with MARKER_FILE.open('rb') as f:
+    MARKER_IMAGE = Image.open(f).copy()
 
 
 class BuildMap:
@@ -51,6 +53,7 @@ class BuildMap:
             self.headers['Referer'] = referrer
 
     async def run(self) -> bytes:
+        # https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Implementations
         x_tile = self.no_tiles * (self.lng + 180) / 360
 
         lat_rad = math.radians(self.lat)
@@ -110,13 +113,10 @@ class BuildMap:
         ImageDraw.Draw(img_fg).text(text_pos, COPYRIGHT_MSG, fill=(0, 0, 0), font=font)
 
         if self.marker:
-            with MARKER_FILE.open('rb') as f:
-                img_m = Image.open(f)
-                mw, mh = MARKER_WIDTH * self.scale / 4, MARKER_HEIGHT * self.scale / 4
-                if self.scale != 4:
-                    img_m = img_m.resize((intr(mw), intr(mh)))
-
-                img_fg.paste(img_m, (intr(self.w / 2 - mw / 2), intr(self.h / 2 - mh)))
+            # marker is 4 times normal size, 4x scaling is disabled as fonts don't work
+            mw, mh = MARKER_WIDTH * self.scale / 4, MARKER_HEIGHT * self.scale / 4
+            img_m = MARKER_IMAGE.resize((intr(mw), intr(mh)))
+            img_fg.paste(img_m, (intr(self.w / 2 - mw / 2), intr(self.h / 2 - mh)))
 
         bio = io.BytesIO()
         Image.alpha_composite(img_bg, img_fg).convert('RGB').save(bio, format='jpeg', quality=95, optimize=True)

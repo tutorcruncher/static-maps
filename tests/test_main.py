@@ -1,6 +1,5 @@
 from io import BytesIO
 
-import pytest
 from PIL import Image
 from pytest_toolbox.comparison import RegexStr
 
@@ -114,13 +113,12 @@ async def test_marker(cli):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     rgb = image.getpixel((100, 45))
-    assert rgb[0] > 100  # pixel is now "red" since it's now on the marker
+    assert rgb[0] > 100  # pixel is now "red" since it's on the marker
 
 
-@pytest.mark.parametrize('scale', [1, 2, 3, 4])
-async def test_scale(scale, cli):
-    r = await cli.get(f'/map.jpg?lat=51&lng=-2&width=200&height=100&scale={scale}')
+async def test_scale(cli):
+    r = await cli.get(f'/map.jpg?lat=51&lng=-2&width=200&height=100&scale=2')
     content = await r.read()
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
-    assert image.size == (200 * scale, 100 * scale)
+    assert image.size == (400, 200)
