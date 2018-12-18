@@ -1,5 +1,6 @@
 from io import BytesIO
 
+import pytest
 from PIL import Image
 from pytest_toolbox.comparison import RegexStr
 
@@ -98,3 +99,33 @@ async def test_with_referer(cli, dummy_server):
     assert image.size == (600, 400)
     assert len(dummy_server.log) == 6
     assert dummy_server.log[0][3] == 'https://www.example.com/page/'
+
+
+async def test_marker(cli):
+    r = await cli.get('/map.jpg?lat=45&lng=0&marker=0&width=200&height=100')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    rgb = image.getpixel((100, 45))
+    assert rgb[0] < 100
+
+    r = await cli.get('/map.jpg?lat=45&lng=0&marker=1&width=200&height=100')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    rgb = image.getpixel((100, 45))
+    assert rgb[0] > 100  # pixel is now "red" since it's now on the marker
+
+
+@pytest.mark.parametrize('scale,width,height', [
+    (1, 600, 400),
+    (2, 1200, 800),
+    (3, 1800, 1200),
+    (4, 2400, 1600),
+])
+async def test_scale(scale, width, height, cli):
+    r = await cli.get(f'/map.jpg?lat=51&lng=-2&scale={scale}')
+    content = await r.read()
+    assert r.status == 200, content
+    image = Image.open(BytesIO(content))
+    assert image.size == (width, height)
