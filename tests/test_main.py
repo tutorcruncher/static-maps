@@ -117,15 +117,10 @@ async def test_marker(cli):
     assert rgb[0] > 100  # pixel is now "red" since it's now on the marker
 
 
-@pytest.mark.parametrize('scale,width,height', [
-    (1, 600, 400),
-    (2, 1200, 800),
-    (3, 1800, 1200),
-    (4, 2400, 1600),
-])
-async def test_scale(scale, width, height, cli):
-    r = await cli.get(f'/map.jpg?lat=51&lng=-2&scale={scale}')
+@pytest.mark.parametrize('scale', [1, 2, 3, 4])
+async def test_scale(scale, cli):
+    r = await cli.get(f'/map.jpg?lat=51&lng=-2&width=200&height=100&scale={scale}')
     content = await r.read()
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
-    assert image.size == (width, height)
+    assert image.size == (200 * scale, 100 * scale)

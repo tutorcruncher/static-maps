@@ -91,7 +91,6 @@ class BuildMap:
         self.times.append(time() - start)
         if r.status != 200:
             data = {'content': content, 'response_headers': dict(r.headers)}
-            print(content.decode())
             logger.warning('unexpected status %d from %r', r.status, url, extra={'data': data})
         else:
             self.tiles.add((content, image_x, image_y))
@@ -102,6 +101,7 @@ class BuildMap:
         for content, x, y in self.tiles:
             img_bg.paste(Image.open(io.BytesIO(content)), (x, y))
 
+        self.tiles = None
         img_fg = Image.new('RGBA', img_bg.size, (0, 0, 0, 0))
         rect_box = self.w - 205 * self.scale, self.h - 20 * self.scale, self.w, self.h
         ImageDraw.Draw(img_fg).rectangle(rect_box, fill=(255, 255, 255, 128))
