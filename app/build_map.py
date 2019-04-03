@@ -101,16 +101,12 @@ class BuildMap:
 
     def build_image(self):
         # minimum image width is set to 95px to fit copyright text
-        box_size_w = 95
-        box_size_h = 8
-        text_pos_x = 94
-        text_pos_y = 8
+        box_size_w, box_size_h = 95, 8
+        text_pos_x, text_pos_y = 94, 8
         font_size = 7
         if self.w >= 205:
-            box_size_w = 205
-            box_size_h = 20
-            text_pos_x = 200
-            text_pos_y = 20
+            box_size_w, box_size_h = 205, 20
+            text_pos_x, text_pos_y = 200, 20
             font_size = 14
 
         img_bg = Image.new('RGBA', (self.w, self.h), (255, 255, 255, 255))
