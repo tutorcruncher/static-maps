@@ -66,7 +66,8 @@ class BuildMap:
 
         logger.info('lat=%0.6f lng=%0.6f zoom=%d tiles=%d avg-download-time=%0.3fs', self.lat, self.lng, self.zoom,
                     len(self.times), mean(self.times))
-        return await self.app.loop.run_in_executor(self.app['thread_pool'], self.build_image)
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(self.app['thread_pool'], self.build_image)
 
     @staticmethod
     def range_correction(tile_no, size):
