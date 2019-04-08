@@ -42,7 +42,7 @@ async def test_osm_error(cli, dummy_server, caplog):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (200, 100)
-    assert len(caplog.records) == 5
+    assert len(caplog.records) == 4
     r = caplog.records[0]
     assert r.getMessage() == RegexStr(r"unexpected status 429 from 'http://localhost:\d+/osm/6/\d\d/\d\d\.png'")
 

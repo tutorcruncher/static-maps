@@ -52,8 +52,8 @@ class QueryModel(BaseModel):
     lat: confloat(ge=-85, le=85)
     lng: confloat(ge=-180, le=180)
     zoom: conint(gt=0, lt=20) = 10
-    width: conint(ge=200, le=1000) = 600
-    height: conint(ge=100, le=1000) = 400
+    width: conint(ge=95, le=1000) = 600
+    height: conint(ge=60, le=1000) = 400
     marker: bool = True
     scale: conint(ge=1, le=2) = 1
 

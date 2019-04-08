@@ -66,7 +66,8 @@ class BuildMap:
 
         logger.info('lat=%0.6f lng=%0.6f zoom=%d tiles=%d avg-download-time=%0.3fs', self.lat, self.lng, self.zoom,
                     len(self.times), mean(self.times))
-        return await self.app.loop.run_in_executor(self.app['thread_pool'], self.build_image)
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(self.app['thread_pool'], self.build_image)
 
     @staticmethod
     def range_correction(tile_no, size):
@@ -99,6 +100,15 @@ class BuildMap:
             self.tiles.add((content, image_x, image_y))
 
     def build_image(self):
+        # minimum image width is set to 95px to fit copyright text
+        box_size_w, box_size_h = 95, 8
+        text_pos_x, text_pos_y = 94, 8
+        font_size = 7
+        if self.w >= 205:
+            box_size_w, box_size_h = 205, 20
+            text_pos_x, text_pos_y = 200, 20
+            font_size = 14
+
         img_bg = Image.new('RGBA', (self.w, self.h), (255, 255, 255, 255))
 
         for content, x, y in self.tiles:
@@ -106,10 +116,10 @@ class BuildMap:
 
         self.tiles = None
         img_fg = Image.new('RGBA', img_bg.size, (0, 0, 0, 0))
-        rect_box = self.w - 205 * self.scale, self.h - 20 * self.scale, self.w, self.h
+        rect_box = self.w - box_size_w * self.scale, self.h - box_size_h * self.scale, self.w, self.h
         ImageDraw.Draw(img_fg).rectangle(rect_box, fill=(255, 255, 255, 128))
-        text_pos = self.w - 200 * self.scale, self.h - 20 * self.scale
-        font = ImageFont.truetype(FONT_FILE, 14 * self.scale)
+        text_pos = self.w - text_pos_x * self.scale, self.h - text_pos_y * self.scale
+        font = ImageFont.truetype(FONT_FILE, font_size * self.scale)
         ImageDraw.Draw(img_fg).text(text_pos, COPYRIGHT_MSG, fill=(0, 0, 0), font=font)
 
         if self.marker:
