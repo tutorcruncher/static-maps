@@ -29,7 +29,7 @@ COPY --from=python-build /usr/local/bin/atoolbox /usr/local/bin/
 COPY --from=python-build /lib/* /lib/
 COPY --from=python-build /usr/lib/* /usr/lib/
 COPY --from=python-build /usr/local/lib/python3.7/site-packages /usr/local/lib/python3.7/site-packages
-RUN ls -lhR /usr/local/lib/python3.7/site-packages
+# RUN ls -lhR /usr/local/lib/python3.7/site-packages
 
 ADD ./app /home/root/app
 
