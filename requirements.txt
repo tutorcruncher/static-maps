@@ -1,5 +1,5 @@
 aiohttp==3.5.4
-aiohttp-toolbox==0.3.3
+aiohttp-toolbox==0.4.3
 brotli==1.0.7
 cchardet==2.1.4
 pillow==5.3.0
