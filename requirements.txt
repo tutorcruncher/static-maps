@@ -6,4 +6,4 @@ pillow==6.1.0
 pydantic==0.32.2
 raven==6.10.0
 raven-aiohttp==0.7.0
-uvloop==0.13.0
+uvloop==0.14.0
