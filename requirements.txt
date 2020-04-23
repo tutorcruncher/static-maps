@@ -1,7 +1,7 @@
 aiohttp==3.6.2
 aiohttp-toolbox==0.4.3
 brotli==1.0.7
-cchardet==2.1.4
+cchardet==2.1.6
 pillow==6.2.0
 pydantic==0.32.2
 raven==6.10.0
