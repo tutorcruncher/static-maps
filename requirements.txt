@@ -1,4 +1,4 @@
-aiohttp==3.5.4
+aiohttp==3.6.2
 aiohttp-toolbox==0.4.3
 brotli==1.0.7
 cchardet==2.1.4
