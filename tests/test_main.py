@@ -116,7 +116,7 @@ async def test_marker(cli):
 
 
 async def test_scale(cli):
-    r = await cli.get(f'/map.jpg?lat=51&lng=-2&width=200&height=100&scale=2')
+    r = await cli.get('/map.jpg?lat=51&lng=-2&width=200&height=100&scale=2')
     content = await r.read()
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
