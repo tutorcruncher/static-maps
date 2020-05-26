@@ -34,12 +34,12 @@ async def _fix_dummy_server(loop, aiohttp_server):
 
 @pytest.fixture(name='settings')
 def _fix_settings(dummy_server: DummyServer, request):
-    from settings import Settings
+    from app.settings import Settings
     return Settings(osm_root=f'{dummy_server.server_name}/osm')
 
 
 @pytest.fixture(name='cli')
 async def _fix_cli(settings, aiohttp_client, loop):
-    from main import create_app
+    from app.main import create_app
     app = await create_app(settings=settings)
     return await aiohttp_client(app)

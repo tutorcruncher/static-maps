@@ -53,7 +53,7 @@ async def test_map_images(cli, dummy_server):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (300, 100)
-    assert sorted(dummy_server.log) == [(10, 511, 1, None), (10, 512, 1, None)]
+    assert dummy_server.log == [(10, 512, 1, None), 'GET /osm/10/512/1.png > 200']
 
 
 async def test_x_wrapped(cli, dummy_server):
@@ -62,12 +62,8 @@ async def test_x_wrapped(cli, dummy_server):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (800, 100)
-    print(sorted(dummy_server.log))
-    assert sorted(dummy_server.log) == [
-        (10, 0, 368, None),
-        (10, 1, 368, None),
-        (10, 1022, 368, None),  # x wrapped
-        (10, 1023, 368, None),
+    assert dummy_server.log == [
+        (10, 1023, 368, None), (10, 0, 368, None), (10, 1, 368, None), 'GET /osm/10/1/368.png > 200',
     ]
 
 
@@ -87,7 +83,7 @@ async def test_y_cut(cli, dummy_server):
     image = Image.open(BytesIO(content))
     assert image.size == (200, 800)
     assert len(dummy_server.log) == 2
-    assert sorted(dummy_server.log) == [(3, 4, 0, None), (3, 4, 1, None)]
+    assert dummy_server.log == [(3, 4, 1, None), 'GET /osm/3/4/1.png > 200']
 
 
 async def test_with_referer(cli, dummy_server):
