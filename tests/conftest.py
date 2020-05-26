@@ -43,3 +43,20 @@ async def _fix_cli(settings, aiohttp_client, loop):
     from app.main import create_app
     app = await create_app(settings=settings)
     return await aiohttp_client(app)
+
+
+class LogSortKey:
+    """
+    Used to sort dummy_servers log to accept different types in the list when sorting
+    """
+    __slots__ = ("value", "typestr")
+
+    def __init__(self, value):
+        self.value = value
+        self.typestr = sys.intern(type(value).__name__)
+
+    def __lt__(self, other):
+        try:
+            return self.value < other.value
+        except TypeError:
+            return self.typestr < other.typestr
