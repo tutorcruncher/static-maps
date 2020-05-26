@@ -64,9 +64,10 @@ async def test_x_wrapped(cli, dummy_server):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (800, 100)
-    assert sorted(dummy_server.log, key=LogSortKey) == [
-        'GET /osm/10/1/368.png > 200', (10, 0, 368, None), (10, 1, 368, None), (10, 1023, 368, None),
-    ]
+    ds_log = sorted(dummy_server.log, key=LogSortKey)
+    r = ds_log.pop(0)
+    assert ds_log == [(10, 0, 368, None), (10, 1, 368, None), (10, 1023, 368, None)]
+    assert '200' in r
 
 
 async def test_not_y_cut(cli, dummy_server):
