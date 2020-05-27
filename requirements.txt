@@ -1,9 +1,9 @@
 aiohttp==3.6.2
-aiohttp-toolbox==0.4.3
+aiohttp-toolbox==0.6.3
 brotli==1.0.7
 cchardet==2.1.6
-pillow==6.2.0
-pydantic==0.32.2
+pillow==7.1.2
+pydantic==1.5.1
 raven==6.10.0
 raven-aiohttp==0.7.0
 uvloop==0.14.0

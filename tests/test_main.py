@@ -3,6 +3,8 @@ from io import BytesIO
 from PIL import Image
 from pytest_toolbox.comparison import RegexStr
 
+from tests.conftest import LogSortKey
+
 
 async def test_index(cli):
     r = await cli.get('/')
@@ -53,7 +55,7 @@ async def test_map_images(cli, dummy_server):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (300, 100)
-    assert sorted(dummy_server.log) == [(10, 511, 1, None), (10, 512, 1, None)]
+    assert sorted(dummy_server.log, key=LogSortKey) == ['GET /osm/10/512/1.png > 200', (10, 512, 1, None)]
 
 
 async def test_x_wrapped(cli, dummy_server):
@@ -62,13 +64,10 @@ async def test_x_wrapped(cli, dummy_server):
     assert r.status == 200, content
     image = Image.open(BytesIO(content))
     assert image.size == (800, 100)
-    print(sorted(dummy_server.log))
-    assert sorted(dummy_server.log) == [
-        (10, 0, 368, None),
-        (10, 1, 368, None),
-        (10, 1022, 368, None),  # x wrapped
-        (10, 1023, 368, None),
-    ]
+    ds_log = sorted(dummy_server.log, key=LogSortKey)
+    r = ds_log.pop(0)
+    assert ds_log == [(10, 0, 368, None), (10, 1, 368, None), (10, 1023, 368, None)]
+    assert '200' in r
 
 
 async def test_not_y_cut(cli, dummy_server):
@@ -87,7 +86,7 @@ async def test_y_cut(cli, dummy_server):
     image = Image.open(BytesIO(content))
     assert image.size == (200, 800)
     assert len(dummy_server.log) == 2
-    assert sorted(dummy_server.log) == [(3, 4, 0, None), (3, 4, 1, None)]
+    assert sorted(dummy_server.log, key=LogSortKey) == ['GET /osm/3/4/1.png > 200', (3, 4, 1, None)]
 
 
 async def test_with_referer(cli, dummy_server):
@@ -117,7 +116,7 @@ async def test_marker(cli):
 
 
 async def test_scale(cli):
-    r = await cli.get(f'/map.jpg?lat=51&lng=-2&width=200&height=100&scale=2')
+    r = await cli.get('/map.jpg?lat=51&lng=-2&width=200&height=100&scale=2')
     content = await r.read()
     assert r.status == 200, content
     image = Image.open(BytesIO(content))

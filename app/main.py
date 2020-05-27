@@ -5,8 +5,8 @@ from aiohttp import web
 from atoolbox import create_default_app
 from atoolbox.middleware import error_middleware
 
-from settings import Settings
-from views import build_index, get_map, index, robots
+from app.settings import Settings
+from app.views import build_index, get_map, index, robots
 
 
 async def pool_shutdown(app):

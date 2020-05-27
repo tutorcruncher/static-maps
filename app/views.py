@@ -4,7 +4,7 @@ import re
 from aiohttp.web import FileResponse, HTTPBadRequest, Response
 from pydantic import BaseModel, ValidationError, confloat, conint
 
-from build_map import THIS_DIR, BuildMap
+from app.build_map import THIS_DIR, BuildMap
 
 ROBOTS_TXT = THIS_DIR / 'robots.txt'
 
