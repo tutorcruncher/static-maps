@@ -1,4 +1,4 @@
-coverage==5.1
+coverage==5.2.1
 flake8==3.8.3
 isort==4.3.21
 lorem==0.1.1
