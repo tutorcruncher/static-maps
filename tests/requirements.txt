@@ -4,10 +4,10 @@ isort==5.4.2
 lorem==0.1.1
 pycodestyle==2.6.0
 pyflakes==2.2.0
-pytest==5.4.3
+pytest==6.0.1
 pytest-aiohttp==0.3.0
 pytest-cov==2.10.0
-pytest-isort==1.0.0
-pytest-mock==3.1.1
-pytest-sugar==0.9.3
+pytest-isort==1.1.0
+pytest-mock==3.2.0
+pytest-sugar==0.9.4
 pytest-toolbox==0.4
