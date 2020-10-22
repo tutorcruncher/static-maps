@@ -9,7 +9,7 @@ install:
 
 .PHONY: isort
 isort:
-	isort -rc -w 120 app tests
+	isort -w 120 app tests
 
 .PHONY: lint
 lint:
