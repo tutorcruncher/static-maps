@@ -4,7 +4,7 @@ isort==5.4.2
 lorem==0.1.1
 pycodestyle==2.6.0
 pyflakes==2.2.0
-pytest==6.1.1
+pytest==6.2.1
 pytest-aiohttp==0.3.0
 pytest-cov==2.10.1
 pytest-isort==1.2.0
