@@ -1,6 +1,6 @@
 coverage==5.3
 flake8==3.8.3
-isort==5.4.2
+isort==5.7.0
 lorem==0.1.1
 pycodestyle==2.6.0
 pyflakes==2.2.0
